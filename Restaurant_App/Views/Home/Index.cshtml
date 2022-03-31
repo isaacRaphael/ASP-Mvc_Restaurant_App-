@@ -1,0 +1,165 @@
+﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<SelectListItem>, IEnumerable<SelectListItem>>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script type="text/javascript">
+    
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const Uprc = document.querySelector("#txtUnitPrice");
+        const Qty = document.querySelector("#txtQuantity");
+        const Discount = document.querySelector("#txtDiscount");
+        const Total = document.querySelector("#txtTotal");
+        const SBtn = document.querySelector("#btnAddToList");
+        const item = document.querySelector("#Item");
+        item.value = "";
+
+        item.addEventListener('change', () => {    
+                GetItemUnitPrice(item.value,Uprc);
+        })
+
+        Q
+    });
+
+
+
+
+    
+
+    function GetItemUnitPrice(itemId, element) {
+        
+        fetch(`https://localhost:44338/Home/GetItemUnitPrice/${itemId}`)
+            .then(resp => resp.json())
+            .then(data => {
+                element.value = parseFloat(data.price).toFixed(2);
+            })
+            .catch(err => console.log(err))
+
+    }
+
+</script>
+<style>
+    fieldset {
+        border : 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 10px;
+        position : relative;
+        border-radius: 4px;
+        background-color : #f5f5f5 ;
+        padding-left : 10px !important;
+    } 
+    legend {
+        font-size : 20px;
+        font-weight : bold;
+        margin-bottom: 0px;
+        width : 200px;
+        border: 1px solid #ddd;
+        border-radius : 4px;
+        padding: 5px 5px 5px 10px;
+        background-color : #fff;
+    }
+</style>
+
+<fieldset>
+    <legend class="text-bold  text-info mt-5">
+        Restaurant 
+    </legend>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    Customer :
+                    @Html.DropDownList("Customer", new SelectList(Model.Item1, dataValueField: "Value", dataTextField: "Text"), htmlAttributes: new {@class = "form-control"})
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    Payment Type :
+                    @Html.DropDownList("PaymentTypes", new SelectList(Model.Item3, dataValueField: "Value", dataTextField: "Text"), htmlAttributes: new {@class = "form-control"})
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<fieldset class="mt-2">
+    <legend class="text-info">
+        Restaurant Items
+    </legend>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    Item :
+                    @Html.DropDownList("Item", new SelectList(Model.Item2, dataValueField: "Value", dataTextField: "Text"), htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    Unit Price :
+                    <input type="text" readonly="readonly" name="UnitPrice" value="0.00" id="txtUnitPrice" class="form-control text-right" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    Quantity :
+                    <input type="text" name="Quantity" value="0.00" id="txtQuantity" class="form-control text-right" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    Discount :
+                    <input type="text" name="Discount" value="0.00" id="txtDiscount" class="form-control text-right" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    Total :
+                    <input type="text" readonly="readonly" name="Total" value="0.00" id="txtTotal" class="form-control text-right" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="button" name="AddToList" id="btnAddToList" value="Add To List" class="btn btn-info mt-4" />
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<fieldset class="mt-2">
+    <legend class="text-info">List Of Tables</legend>
+    <table class="w-100 table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th hidden>
+                    Item Id
+                </th>
+                <th>
+                    Item Name
+                </th>
+                <th>
+                    Unit Price
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Discount
+                </th>
+                <th>
+                    Total
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+    </table>
+</fieldset>
